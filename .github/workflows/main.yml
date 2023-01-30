@@ -23,7 +23,7 @@ jobs:
         with:
           commits: ${{ steps.get-pr-commits.outputs.commits }}
           pattern: '^(EC|SRE)-[0-9]+\s'
-          echo: ${{ steps.get-pr-commits.outputs.commits }}
+          echo: nume ${{ steps.get-pr-commits.outputs.commits }}
           error: 'Commit message does not contain a Jira ticket!'
           
  
