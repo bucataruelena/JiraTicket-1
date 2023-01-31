@@ -14,16 +14,15 @@ jobs:
     steps:
       - name: Get PR Commits
         id: 'get-pr-commits'
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "COMMITS=$(git log --pretty=format:"%s") >> $GITHUB_ENV
 
       - name: Check if the commit message contains a jira ticket
         uses: actions/checkout@v3
         with:
-          commits: ${{ steps.get-pr-commits.outputs.commits }}
+          commits: ${{ env.COMMITS }}
           pattern: '^(EC|SRE)-[0-9]+\s'
-          echo: nume ${{ steps.get-pr-commits.outputs.commits }}
+          echo: "comituri ${{ env.COMMITS }}"
           error: 'Commit message does not contain a Jira ticket!'
           
  
