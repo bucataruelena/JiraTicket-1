@@ -36,7 +36,7 @@ jobs:
           then
             echo $INVALID_COMMITS | \
               jq '.[] |
-                "[FAIL]: \(.sha) is authored with email: \(.commit.author.email) - please add a jira ticket!"'
+                "[FAIL]: please add a jira ticket!"'
             exit 1
           else
             echo All commits contain jira ticket
