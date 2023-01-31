@@ -15,7 +15,7 @@ jobs:
       - name: Get PR Commits
         id: 'get-pr-commits'
         run: |
-          echo "COMMITS=$(git log --pretty=format:"%s") >> $GITHUB_ENV
+          echo "COMMITS=$(git log --pretty=format:"%s")" >> $GITHUB_ENV
 
       - name: Check if the commit message contains a jira ticket
         uses: actions/checkout@v3
