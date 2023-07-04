@@ -23,12 +23,12 @@ jobs:
                  ${{ github.event.pull_request.commits_url }}
           )
           INVALID_COMMITS=$(echo $ALL_COMMITS | jq '[ .[] | select(
-            (.commit.message | test("^(EC|SRE)-[0-9]+\s") | not) and
+            (.commit.message | test("^(EC|SRE)-[0-9]+ ") | not) and
             (.parents | length) == 1 and
             (.commit.author.name != "dependabot") and
             (
               (.commit.message | ascii_downcase | contains("revert") | not) or
-              (.commit.message | test("(EC|SRE)-[0-9]+\s") | not)
+              (.commit.message | test("(EC|SRE)-[0-9]+ ") | not)
             )
           )
           ]')
