@@ -13,37 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get PR Commits
-        env:
-          GITHUB_CONTEXT: ${{ github.event.pull_request.commits_url }}
-        shell: bash
-        run: |
-          ALL_COMMITS=$(\
-            curl -s \
-                 -H "Authorization: token ${{ github.token }}" \
-                 ${{ github.event.pull_request.commits_url }}
-          )
-          INVALID_COMMITS=$(echo $ALL_COMMITS | jq '[ .[] | select(
-            (.commit.message | test("^(EC|SRE)-[0-9]+ ") | not) and
-            (.parents | length) == 1 and
-            (.commit.author.name != "dependabot") and
-            (
-              (.commit.message | ascii_downcase | contains("revert") | not) or
-              (.commit.message | test("(EC|SRE)-[0-9]+ ") | not)
-            )
-          )
-          ]')
-          INVALID_COUNT=$(\
-            echo $INVALID_COMMITS | jq '. | length'
-          )
-          if [[ $INVALID_COUNT -gt 0 ]]
-          then
-            echo $INVALID_COMMITS | \
-              jq '.[] |
-                "[FAIL]: Please add a Jira ticket for the following commit \(.sha)."'
-              exit 1
-          else
-            echo All commits contain a Jira ticket.
-          fi
-          
- 
+        id: 'get-pr-commits'
+        uses: actions/checkout@v3
+        with:
+          commits: ${{ github.event.commits.message }}
 
+      - name: Check if the commit message contains a jira ticket
+        uses: actions/checkout@v3
+        with:
+          commits: ${{ github.event.commits.message }}
+          pattern: '^(EC|SRE)-[0-9]+ '
+          echo: ${{ github.event.commits.message }}
+          error: 'Commit message does not contain a Jira ticket!'
